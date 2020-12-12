@@ -1,0 +1,6 @@
+.bg-fill {
+  position: relative;
+  transition: opacity 0.5s ease-in, translate 0.5s ease-in;
+  opacity: 0;
+  translate: 0px -5px;
+}
