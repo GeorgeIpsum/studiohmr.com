@@ -1,20 +1,21 @@
 import React, { CSSProperties, useEffect, useState } from 'react';
 import { ReactComponent as Bg } from './bg.svg';
+import { ReactComponent as Bg2 } from './bg2.svg';
 import hmr from './hmr.png';
 import hmrw from './hmr.webp';
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  useLocation
+  Route
 } from "react-router-dom";
 import './App.css';
 
 const getThings = () => {
-  const a: (HTMLElement | null)[] = [];
+  const a: [(HTMLElement | null), (HTMLElement | null)][] = [];
   for (let i = 1; i < 15; i++) {
     const b = document.getElementById(`bg_${ i }`);
-    if (b) a.push(b);
+    const b2 = document.getElementById(`bg_${ i }_2`);
+    if (b || b2) a.push([b,b2]);
   }
   return a;
 }
@@ -49,14 +50,14 @@ const App: React.FC = () => {
 }
 
 const Home: React.FC = () => {
-  const loc = useLocation();
-  const { height } = useWindowSize();
+  const { height, width } = useWindowSize();
   const imgSize = 0.3 * (height ?? 1200);
   const middleHeight = (window.innerHeight / 2) - (imgSize / 2);
   const middleWidth = (window.innerWidth / 2) - (imgSize / 2);
   const [useTransform, setUseTransform] = useState<boolean>(false);
   const [firstTransform, setFirstTransform] = useState<boolean>(false);
   const [showText, setShowText] = useState<boolean>(false);
+  const [animating, setAnimating] = useState<boolean>(false);
 
   useEffect(() => {
     const fills = getThings();
@@ -64,9 +65,13 @@ const Home: React.FC = () => {
       for (let i = 0; i < fills.length; i++) {
         const fill = fills[i];
         setTimeout(() => {
-          if (fill) {
-            fill.style.opacity = '1';
-            fill.style.translate = '0px 0px';
+          if (fill[0]) {
+            fill[0].style.opacity = '1';
+            fill[0].style.translate = '0px 0px';
+          }
+          if (fill[1]) {
+            fill[1].style.opacity = '1';
+            fill[1].style.translate = '0px 0px';
           }
         }, (200 * fills.length * easingFunc((i + 1) / fills.length)));
       }
@@ -75,8 +80,11 @@ const Home: React.FC = () => {
       setFirstTransform(true);
     }, 200);
     setTimeout(() => {
-      console.log('does this ever run');
       setUseTransform(true);
+      setAnimating(true);
+      setTimeout(() => {
+        setAnimating(false);
+      }, 2500);
     }, 1700);
     setTimeout(() => {
       setShowText(true);
@@ -99,7 +107,7 @@ const Home: React.FC = () => {
     position: 'absolute',
     top: middleHeight + (firstTransform ? 0 : 30),
     left: middleWidth,
-    transition: 'scale 1s ease-out, transform 2s ease-in-out, opacity 1s ease-in, top 1s ease-in',
+    transition: `scale 1s ease-out, opacity 1s ease-in, top 1s ease-in${ animating ? ', transform 2s ease-in-out' : ''}`,
     opacity: firstTransform ? '1' : '0'
   };
 
@@ -122,9 +130,13 @@ const Home: React.FC = () => {
     transition: 'opacity 0.5s ease-in'
   }
 
+  const useHotDog = (height ?? 0) > (width ?? 0);
+  const bgStyle: CSSProperties = { height: '100%', width: '100%' };
+
   return (<>
     <div style={{ width: '100%', height: '100vh', display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start', flexFlow: 'row', background: 'black' }}>
-      <Bg style={{ width: '100%', height: '100vh' }} />
+      <Bg style={{...bgStyle, display: useHotDog ? 'none' : 'block'}} />
+      <Bg2 style={{...bgStyle, display: useHotDog ? 'block' : 'none'}} />
     </div>
     <picture id="logo" style={pictureStyle}>
       <source style={imageStyle} type="image/webp" srcSet={hmrw} />
