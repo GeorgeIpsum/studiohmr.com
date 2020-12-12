@@ -75,6 +75,7 @@ const Home: React.FC = () => {
       setFirstTransform(true);
     }, 200);
     setTimeout(() => {
+      console.log('does this ever run');
       setUseTransform(true);
     }, 1700);
     setTimeout(() => {
@@ -91,15 +92,14 @@ const Home: React.FC = () => {
   const scale = (height ?? 500) < 500 ? 0.5 : 0.3;
 
   const transform: CSSProperties = {
-    translate: `-${ (window.innerWidth / 2 - (imgSize * scale) / 2) - 5 }px -${ (window.innerHeight / 2 - (imgSize * scale) / 2) - 5 }px`,
-    scale: scale.toString()
+    transform: `translate(-${ (window.innerWidth / 2 - (imgSize * scale) / 2) - 5 }px, -${ (window.innerHeight / 2 - (imgSize * scale) / 2) - 5 }px) scale(${ scale.toString() })`
   };
 
   let pictureStyle: CSSProperties = {
     position: 'absolute',
     top: middleHeight + (firstTransform ? 0 : 30),
     left: middleWidth,
-    transition: 'scale 1s ease-out, translate 2s ease-in-out, opacity 1s ease-in, top 1s ease-in',
+    transition: 'scale 1s ease-out, transform 2s ease-in-out, opacity 1s ease-in, top 1s ease-in',
     opacity: firstTransform ? '1' : '0'
   };
 
