@@ -170,9 +170,13 @@ const Sunrise: React.FC = () => {
     }, 50);
   }, []);
 
-  return (<div id="dont_let_go" style={{ opacity: 0, transition: 'opacity 0.5s ease' }}>
-    <div id="let_the_sky_fall" style={{ maxWidth: '100%', height, background: '#fa7b6200', position: 'relative', overflowX: 'hidden', transition: 'background 4s ease' }}>
-      <div id="OH_PUTRID_LIGHT" style={{ position: 'absolute', right: '50%', bottom: '11%', height: 30, width: 30, borderRadius: 30, backgroundColor: '#fa7b62', transition: 'bottom 4s ease' }} />
+  const SKYFALL = () => {
+    const userAgent = navigator.userAgent.toLowerCase();
+    if (userAgent.indexOf('safari') > -1 && userAgent.indexOf('chrome') === -1) {
+      return (<div id="flor" style={{ width: '100%', height: '32%' }} />);
+    }
+
+    return (<>
       <div id="faun" className="bbg">
         <div id="dawn_3" className="bg" />
       </div>
@@ -195,6 +199,13 @@ const Sunrise: React.FC = () => {
           </clipPath>
         </defs>
       </svg>
+    </>);
+  };
+
+  return (<div id="dont_let_go" style={{ opacity: 0, transition: 'opacity 0.5s ease' }}>
+    <div id="let_the_sky_fall" style={{ maxWidth: '100%', height, background: '#fa7b6200', position: 'relative', overflowX: 'hidden', transition: 'background 4s ease' }}>
+      <div id="OH_PUTRID_LIGHT" style={{ position: 'absolute', right: '50%', bottom: '11%', height: 30, width: 30, borderRadius: 30, backgroundColor: '#fa7b62', transition: 'bottom 4s ease' }} />
+      { SKYFALL() }
     </div>
     <div style={{ height }} className="next"></div>
   </div>);
