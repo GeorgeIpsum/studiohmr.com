@@ -170,9 +170,11 @@ const Sunrise: React.FC = () => {
     }, 50);
   }, []);
 
+  const userAgent = navigator.userAgent.toLowerCase();
+  const isSafari = userAgent.indexOf('safari') > -1 && userAgent.indexOf('chrome') === -1;
+
   const SKYFALL = () => {
-    const userAgent = navigator.userAgent.toLowerCase();
-    if (userAgent.indexOf('safari') > -1 && userAgent.indexOf('chrome') === -1) {
+    if (isSafari) {
       return (<div id="flor" style={{ width: '100%', height: '32%' }} />);
     }
 
@@ -207,7 +209,9 @@ const Sunrise: React.FC = () => {
       <div id="OH_PUTRID_LIGHT" style={{ position: 'absolute', right: '50%', bottom: '11%', height: 30, width: 30, borderRadius: 30, backgroundColor: '#fa7b62', transition: 'bottom 4s ease' }} />
       { SKYFALL() }
     </div>
-    <div style={{ height }} className="next"></div>
+    <div style={{ height, position: 'relative' }} className="next">
+      {isSafari && <div style={{ position: 'absolute', bottom: 0, width: '100%', color: 'white', textAlign: 'center', marginBottom: 5 }}>Please use a better browser. Thx</div>}
+    </div>
   </div>);
 };
 
