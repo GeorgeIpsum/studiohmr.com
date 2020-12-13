@@ -4,3 +4,69 @@
   opacity: 0;
   translate: 0px -5px;
 }
+
+.bbg {
+  width: 100%;
+}
+
+.bg {
+  position: absolute;
+  height: 100%; width: 100%;
+  transition: all 500ms ease;
+}
+
+.next {
+  background-color: #121612;
+}
+
+#dawn {
+  background: radial-gradient(ellipse at 50% 10%, #FF0000, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent),
+              radial-gradient(ellipse at 50% 35%, #e6646511, transparent, transparent, transparent),
+              radial-gradient(ellipse at 25% 10%, #fa7b6209, transparent, transparent, transparent),
+              radial-gradient(ellipse at 80% 10%, #fa7b6209, transparent, transparent, transparent);
+}
+
+#dawn_2 {
+  background: radial-gradient(ellipse at 50% 20%, #FF0000, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent),
+  radial-gradient(ellipse at 50% 15%, #8172721F, transparent, transparent, transparent),
+  radial-gradient(ellipse at 25% 10%, #fa7b620F, transparent, transparent, transparent),
+  radial-gradient(ellipse at 80% 10%, #fa7b620F, transparent, transparent, transparent);
+}
+
+#dawn_3 {
+  background: radial-gradient(ellipse at 50% 25%, #FF000002, transparent, transparent),
+  radial-gradient(ellipse at 50% 15%, #e664651F, transparent, transparent, transparent),
+  radial-gradient(ellipse at 25% 10%, #fa7b6212, transparent, transparent, transparent),
+  radial-gradient(ellipse at 80% 10%, #fa7b6212, transparent, transparent, transparent);
+}
+
+#flor {
+  height: 40%;
+  width: 100%;
+  max-height: 300px;
+  position: absolute;
+  bottom: 0;
+  z-index: 1000;
+  background-color: #121612;
+  clip-path: url("#forest_1")
+}
+
+#flora {
+  height: 42%;
+  max-height: 450px;
+  position: absolute;
+  bottom: 0;
+  z-index: 999;
+  background-color: #1D3427;
+  clip-path: url("#forest_2");
+}
+
+#faun {
+  height: 40%;
+  max-height: 400px;
+  position: absolute;
+  bottom: 0;
+  z-index: 998;
+  background-color: #2F4B44;
+  clip-path: url("#forest_3");
+}
