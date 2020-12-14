@@ -1,3 +1,5 @@
+html, body {margin:0;padding:0;height:100%;}
+
 .bg-fill {
   position: relative;
   transition: opacity 0.5s ease-in, translate 0.5s ease-in;

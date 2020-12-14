@@ -6,7 +6,8 @@ import hmrw from './hmr.webp';
 import {
   BrowserRouter as Router,
   Switch,
-  Route
+  Route,
+  Link
 } from "react-router-dom";
 import './App.css';
 
@@ -50,10 +51,13 @@ const App: React.FC = () => {
 };
 
 const Home: React.FC = () => {
-  const { height, width } = useWindowSize();
-  const imgSize = 0.3 * (height ?? 1200);
-  const middleHeight = (window.innerHeight / 2) - (imgSize / 2);
-  const middleWidth = (window.innerWidth / 2) - (imgSize / 2);
+  const { height: h, width: w } = useWindowSize();
+  const width = w ?? window.innerWidth;
+  const height = h ?? window.innerHeight;
+  const imgSize = 0.3 * height;
+
+  const middleHeight = (height / 2) - (imgSize / 2);
+  const middleWidth = (width / 2) - (imgSize / 2);
   const [useTransform, setUseTransform] = useState<boolean>(false);
   const [firstTransform, setFirstTransform] = useState<boolean>(false);
   const [showText, setShowText] = useState<boolean>(false);
@@ -100,14 +104,14 @@ const Home: React.FC = () => {
   const scale = (height ?? 500) < 500 ? 0.5 : 0.3;
 
   const transform: CSSProperties = {
-    transform: `translate(-${ (window.innerWidth / 2 - (imgSize * scale) / 2) - 5 }px, -${ (window.innerHeight / 2 - (imgSize * scale) / 2) - 5 }px) scale(${ scale.toString() })`
+    transform: `translate(-${ (width / 2 - (imgSize * scale) / 2) - 5 }px, -${ (height / 2 - (imgSize * scale) / 2) - 5 }px) scale(${ scale.toString() })`
   };
 
   let pictureStyle: CSSProperties = {
     position: 'absolute',
     top: middleHeight + (firstTransform ? 0 : 30),
     left: middleWidth,
-    transition: `scale 1s ease-out, opacity 1s ease-in, top 1s ease-in${ animating ? ', transform 2s ease-in-out' : '' }`,
+    transition: animating ? `scale 1s ease-out, opacity 1s ease-in, top 1s ease-in, transform 2s ease-in-out` : undefined,
     opacity: firstTransform ? '1' : '0'
   };
 
@@ -134,7 +138,7 @@ const Home: React.FC = () => {
   const bgStyle: CSSProperties = { height: '100%', width: '100%' };
 
   return (<>
-    <div style={{ width: '100%', height: '100vh', display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start', flexFlow: 'row', background: 'black' }}>
+    <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: useHotDog ? 'center' : 'flex-start', flexFlow: 'row', background: 'black' }}>
       <Bg style={{ ...bgStyle, display: useHotDog ? 'none' : 'block' }} />
       <Bg2 style={{ ...bgStyle, display: useHotDog ? 'block' : 'none' }} />
     </div>
@@ -147,9 +151,10 @@ const Home: React.FC = () => {
 };
 
 const Sunrise: React.FC = () => {
-  const { width: w, height: h } = useWindowSize();
-  const width = w ?? window.innerWidth;
-  const height = h ?? window.innerHeight;
+  // const { width: w, height: h } = useWindowSize();
+  // const width = w ?? window.innerWidth;
+  // const height = h ?? window.innerHeight;
+  const [goBackVisible, setVisible] = useState<boolean>(false);
 
   useEffect(() => {
     setTimeout(() => {
@@ -167,6 +172,10 @@ const Sunrise: React.FC = () => {
       if (bg) {
         bg.style.opacity = '1';
       }
+
+      setTimeout(() => {
+        setVisible(true);
+      }, 5000);
     }, 50);
   }, []);
 
@@ -204,16 +213,32 @@ const Sunrise: React.FC = () => {
     </>);
   };
 
-  return (<div id="dont_let_go" style={{ opacity: 0, transition: 'opacity 0.5s ease' }}>
-    <div id="let_the_sky_fall" style={{ maxWidth: '100%', height, background: '#fa7b6200', position: 'relative', overflowX: 'hidden', transition: 'background 4s ease' }}>
-      <div id="OH_PUTRID_LIGHT" style={{ position: 'absolute', right: '50%', bottom: '11%', height: 30, width: 30, borderRadius: 30, backgroundColor: '#fa7b62', transition: 'bottom 4s ease' }} />
+  const otherDisplay: CSSProperties = goBackVisible
+    ? {
+      opacity: '1'
+    } : {
+      opacity: '0'
+    };
+
+  return (<div id="dont_let_go" style={{ opacity: 0, transition: 'opacity 0.5s ease', height: '100%' }}>
+    <Link to="" style={{ position: 'fixed', top: 15, left: 15, zIndex: 100000 }}>
+      <div style={{ transition: 'opacity 1s ease', ...otherDisplay }}>
+        <GoBack style={{ background: 'transparent', fill: 'white' }} />
+      </div>
+    </Link>
+    <div id="let_the_sky_fall" style={{ maxWidth: '100%', height: '100%', background: '#fa7b6200', position: 'relative', overflowX: 'hidden', transition: 'background 4s ease' }}>
+      <Nasty style={{position: 'absolute', right: '50%', bottom: '11%'}} />
       { SKYFALL() }
     </div>
-    <div style={{ height, position: 'relative' }} className="next">
+    <div style={{ height: 1500, position: 'relative' }} className="next">
       {isSafari && <div style={{ position: 'absolute', bottom: 0, width: '100%', color: 'white', textAlign: 'center', marginBottom: 5 }}>Please use a better browser. Thx</div>}
     </div>
   </div>);
 };
+
+const Nasty: React.FC<{ style: CSSProperties }> = ({ style }) => {
+  return <div id="OH_PUTRID_LIGHT" style={{ height: 30, width: 30, borderRadius: 30, backgroundColor: '#fa7b62', transition: 'bottom 4s ease', ...style }} />;
+}
 
 function useWindowSize() {
   const [windowSize, setWindowSize] = useState<{ width?: number, height?: number; }>({
@@ -264,6 +289,14 @@ function useMousePosition() {
   }, []);
 
   return mousePosition;
+}
+
+const GoBack: React.FC<{ style: CSSProperties, width?: string, height?: string }> = ({ style, width = '20px', height = '20px' }) => {
+  return (
+    <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width={width} height={height} viewBox="0 0 408 408" style={style} xmlSpace="preserve">
+      <path d="M408,178.5H96.9L239.7,35.7L204,0L0,204l204,204l35.7-35.7L96.9,229.5H408V178.5z" />
+    </svg>
+  );
 }
 
 export default App;
