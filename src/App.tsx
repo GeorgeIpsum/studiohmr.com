@@ -111,7 +111,7 @@ const Home: React.FC = () => {
     position: 'absolute',
     top: middleHeight + (firstTransform ? 0 : 30),
     left: middleWidth,
-    transition: animating ? `scale 1s ease-out, opacity 1s ease-in, top 1s ease-in, transform 2s ease-in-out` : undefined,
+    transition: animating ? `scale 1s ease-out, top 1s ease-in, transform 2s ease-in-out` : `opacity 1s ease-in`,
     opacity: firstTransform ? '1' : '0'
   };
 
